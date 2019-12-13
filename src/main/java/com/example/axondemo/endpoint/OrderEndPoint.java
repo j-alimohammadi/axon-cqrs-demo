@@ -25,4 +25,6 @@ public class OrderEndPoint {
     public CompletableFuture<OrderReceiveCommand> receiveOrder(Long orderId) {
         return orderCommandService.receiveOrder(orderId);
     }
+
+
 }

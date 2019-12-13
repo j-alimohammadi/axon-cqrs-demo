@@ -32,13 +32,6 @@ log/
 target/
 
 
-# Microsoft word temp files
-**/~$cument.docx
-**/main/resources/docs/*.tmp
-
-
-# Visual Paradigm temp files
-**/*.vpp~*
 
 
 # JRebel config
