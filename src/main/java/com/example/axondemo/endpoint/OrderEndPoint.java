@@ -2,6 +2,7 @@ package com.example.axondemo.endpoint;
 
 import com.example.axondemo.commands.cancel.CanceleOrderCommand;
 import com.example.axondemo.commands.cancel.OnCanceleOrderCommand;
+import com.example.axondemo.commands.create.ActiveOrderCommand;
 import com.example.axondemo.commands.create.OnBoardOrderCommand;
 import com.example.axondemo.commands.create.ReceiveOrderCommand;
 import com.example.axondemo.commands.modify.ModifyOrderCommand;
@@ -39,7 +40,7 @@ public class OrderEndPoint {
 
 
     @PutMapping("/activeOrder")
-    public CompletableFuture<OnBoardOrderCommand> activeOrder(Long orderId) {
+    public CompletableFuture<ActiveOrderCommand> activeOrder(Long orderId) {
         return orderCommandService.activeOrder(orderId);
     }
 

@@ -23,8 +23,6 @@ import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateLifecycle;
 import org.axonframework.spring.stereotype.Aggregate;
 
-import java.util.UUID;
-
 /**
  * @author Javad Alimohammadi<bs.alimohammadi@gmail.com>
  */
@@ -54,7 +52,7 @@ public class OrderAggregate {
     @EventSourcingHandler
     public void on(OrderNonedEvent orderNonedEvent) {
         this.id = orderNonedEvent.id;
-        this.omsId = UUID.randomUUID().toString();
+        this.omsId = orderNonedEvent.omsId;
         this.orderStatus = OrderStatus.NONE;
 
         log.info("Init Order id=[{}] state=[{}]", id, orderStatus.toString());

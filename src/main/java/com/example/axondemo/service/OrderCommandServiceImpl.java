@@ -36,7 +36,7 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    public CompletableFuture<OnBoardOrderCommand> activeOrder(Long id) {
+    public CompletableFuture<ActiveOrderCommand> activeOrder(Long id) {
         ActiveOrderCommand activeOrderCommand = new ActiveOrderCommand(id);
         return commandGateway.send(activeOrderCommand);
     }
