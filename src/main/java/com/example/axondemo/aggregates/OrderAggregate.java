@@ -7,6 +7,8 @@ import com.example.axondemo.commands.create.OnBoardOrderCommand;
 import com.example.axondemo.commands.create.ReceiveOrderCommand;
 import com.example.axondemo.commands.modify.ModifyOrderCommand;
 import com.example.axondemo.commands.modify.OnModifyOrderCommand;
+import com.example.axondemo.events.order.cancel.OnCanceledEvent;
+import com.example.axondemo.events.order.cancel.OnCancellingEvent;
 import com.example.axondemo.events.order.create.OnActivatedEvent;
 import com.example.axondemo.events.order.create.OnBoardEvent;
 import com.example.axondemo.events.order.create.OrderNonedEvent;
@@ -55,7 +57,7 @@ public class OrderAggregate {
         this.omsId = UUID.randomUUID().toString();
         this.orderStatus = OrderStatus.NONE;
 
-        log.info("Order id=[{}] state=[{}]", id, orderStatus.toString());
+        log.info("Init Order id=[{}] state=[{}]", id, orderStatus.toString());
     }
 
     @CommandHandler
@@ -87,7 +89,7 @@ public class OrderAggregate {
     @EventSourcingHandler
     public void on(OnActivatedEvent onActivatedEvent) {
         log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ACTIVATE);
-        this.orderStatus = OrderStatus.ON_BOARD;
+        this.orderStatus = OrderStatus.ACTIVATE;
 
     }
 
@@ -113,17 +115,15 @@ public class OrderAggregate {
             throw new RuntimeException("Order Should be on modified status");
         }
 
+        AggregateLifecycle.apply(new OnModifiedEvent(modifyOrderCommand.id));
+    }
+
+    @EventSourcingHandler
+    public void on(OnModifiedEvent onModifiedEvent) {
         log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.MODIFIED);
         this.orderStatus = OrderStatus.MODIFIED;
     }
 
-    @EventSourcingHandler
-    public void on(OnModifiedEvent onModifyingEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ON_MODIFY);
-        this.orderStatus = OrderStatus.ON_MODIFY;
-    }
-
-    
 
     @CommandHandler
     public void on(OnCanceleOrderCommand onCanceleOrderCommand) {
@@ -135,6 +135,12 @@ public class OrderAggregate {
             throw new RuntimeException("Order is canceled before");
         }
 
+        AggregateLifecycle.apply(new OnCancellingEvent(onCanceleOrderCommand.id));
+    }
+
+
+    @EventSourcingHandler
+    public void on(OnCancellingEvent onCancellingEvent) {
         log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ON_CANCEL);
         this.orderStatus = OrderStatus.ON_CANCEL;
     }
@@ -149,9 +155,14 @@ public class OrderAggregate {
             throw new RuntimeException("Order is canceled before");
         }
 
+        AggregateLifecycle.apply(new OnCanceledEvent(canceleOrderCommand.id));
+    }
+
+
+    @EventSourcingHandler
+    public void on(OnCanceledEvent onCanceledEvent) {
         log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.CANCELED);
         this.orderStatus = OrderStatus.CANCELED;
     }
-
 
 }
