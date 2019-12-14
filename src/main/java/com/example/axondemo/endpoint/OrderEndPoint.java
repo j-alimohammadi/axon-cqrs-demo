@@ -1,6 +1,6 @@
 package com.example.axondemo.endpoint;
 
-import com.example.axondemo.commands.create.OrderReceiveCommand;
+import com.example.axondemo.commands.create.ReceiveOrderCommand;
 import com.example.axondemo.service.OrderCommandService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class OrderEndPoint {
     }
 
     @PostMapping("/receive")
-    public CompletableFuture<OrderReceiveCommand> receiveOrder(Long orderId) {
+    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long orderId) {
         return orderCommandService.receiveOrder(orderId);
     }
 

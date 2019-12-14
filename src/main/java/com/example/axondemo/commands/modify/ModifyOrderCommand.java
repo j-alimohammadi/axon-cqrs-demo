@@ -6,9 +6,9 @@ import com.example.axondemo.commands.BaseCommand;
  * @author Javad Alimohammadi<bs.alimohammadi@gmail.com>
  */
 
-public class OrderModifiedCommand extends BaseCommand<Long> {
+public class ModifyOrderCommand extends BaseCommand<Long> {
 
-    public OrderModifiedCommand(Long id) {
+    public ModifyOrderCommand(Long id) {
         super(id);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.axondemo.service;
 
-import com.example.axondemo.commands.create.OrderReceiveCommand;
+import com.example.axondemo.commands.create.ReceiveOrderCommand;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -9,5 +9,5 @@ import java.util.concurrent.CompletableFuture;
  */
 
 public interface OrderCommandService {
-    CompletableFuture<OrderReceiveCommand> receiveOrder(Long id);
+    CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id);
 }

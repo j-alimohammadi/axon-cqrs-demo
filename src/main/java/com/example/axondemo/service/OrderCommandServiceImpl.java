@@ -1,6 +1,6 @@
 package com.example.axondemo.service;
 
-import com.example.axondemo.commands.create.OrderReceiveCommand;
+import com.example.axondemo.commands.create.ReceiveOrderCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +18,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    public CompletableFuture<OrderReceiveCommand> receiveOrder(Long id) {
-        OrderReceiveCommand orderReceiveCommand = new OrderReceiveCommand(id);
-       return commandGateway.send(orderReceiveCommand);
+    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id) {
+        ReceiveOrderCommand receiveOrderCommand = new ReceiveOrderCommand(id);
+       return commandGateway.send(receiveOrderCommand);
     }
 }

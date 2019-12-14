@@ -10,4 +10,6 @@ public class BaseCommand<T> {
     public BaseCommand(T id) {
         this.id = id;
     }
+
+
 }

@@ -6,10 +6,14 @@ package com.example.axondemo.aggregates;
 
 public enum OrderStatus {
     NONE(0, "بدون وضعیت"),
-    MODIFY(1, "ویرایش"),
+    ON_BOARD(1, "سفارش دریافت شد"),
+    ACTIVATE(1, "فعال شده"),
+    ON_MODIFY(1, "در حال ویرایش"),
+    MODIFIED(1, "ویرایش"),
     ERROR(2, "خطا"),
-    CANCEL(3, "حذف دستور"),
-    DELETE(4, "ابطال دستور"),
+    CANCELED(3, "حذف دستور"),
+    ON_CANCEL(3, "حذف دستور"),
+    DELETED(4, "ابطال دستور"),
     DONE(5, "انجام شد");
 
 
