@@ -1,5 +1,6 @@
 package com.example.axondemo.events.order.cancel;
 
+import com.example.axondemo.aggregates.OrderStatus;
 import com.example.axondemo.events.AbstractBaseEvent;
 
 /**
@@ -7,8 +8,10 @@ import com.example.axondemo.events.AbstractBaseEvent;
  */
 
 public class OnCanceledEvent extends AbstractBaseEvent<Long> {
+    public final OrderStatus orderStatus;
 
-    public OnCanceledEvent(Long id) {
+    public OnCanceledEvent(Long id, OrderStatus orderStatus) {
         super(id);
+        this.orderStatus = orderStatus;
     }
 }

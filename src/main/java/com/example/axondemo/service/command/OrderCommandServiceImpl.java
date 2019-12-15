@@ -1,4 +1,4 @@
-package com.example.axondemo.service;
+package com.example.axondemo.service.command;
 
 import com.example.axondemo.commands.cancel.CanceleOrderCommand;
 import com.example.axondemo.commands.cancel.OnCanceleOrderCommand;
@@ -24,8 +24,8 @@ public class OrderCommandServiceImpl implements OrderCommandService {
     }
 
     @Override
-    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id) {
-        ReceiveOrderCommand receiveOrderCommand = new ReceiveOrderCommand(id);
+    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id, Double price, Integer quantity) {
+        ReceiveOrderCommand receiveOrderCommand = new ReceiveOrderCommand(id, quantity, price);
         return commandGateway.send(receiveOrderCommand);
     }
 

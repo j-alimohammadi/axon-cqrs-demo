@@ -38,7 +38,11 @@ public class OrderAggregate {
 
     private String omsId;
 
+    private Integer quantity;
+
     private OrderStatus orderStatus;
+
+    private double price;
 
     public OrderAggregate() {
     }
@@ -46,16 +50,20 @@ public class OrderAggregate {
 
     @CommandHandler
     public OrderAggregate(ReceiveOrderCommand receiveOrderCommand) {
-        AggregateLifecycle.apply(new OrderNonedEvent(receiveOrderCommand.id));
+        AggregateLifecycle.apply(new OrderNonedEvent(receiveOrderCommand.id,
+                receiveOrderCommand.quantity
+                , receiveOrderCommand.price, OrderStatus.NONE));
     }
 
     @EventSourcingHandler
     public void on(OrderNonedEvent orderNonedEvent) {
         this.id = orderNonedEvent.id;
         this.omsId = orderNonedEvent.omsId;
-        this.orderStatus = OrderStatus.NONE;
+        this.orderStatus = orderNonedEvent.orderStatus;
+        this.price = orderNonedEvent.price;
+        this.quantity = orderNonedEvent.quantity;
 
-        log.info("Init Order id=[{}] state=[{}]", id, orderStatus.toString());
+        log.info("Init Order id=[{}], state=[{}], price=[{}], quantity=[{}]  ", id, orderStatus.toString(), price, quantity);
     }
 
     @CommandHandler
@@ -63,15 +71,15 @@ public class OrderAggregate {
         if (this.orderStatus != OrderStatus.NONE) {
             throw new RuntimeException("Order Should be on none status first");
         }
-        AggregateLifecycle.apply(new OnBoardEvent(onBoardOrderCommand.id));
+        AggregateLifecycle.apply(new OnBoardEvent(onBoardOrderCommand.id, OrderStatus.ON_BOARD));
 
 
     }
 
     @EventSourcingHandler
     public void on(OnBoardEvent onBoardEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ON_BOARD);
-        this.orderStatus = OrderStatus.ON_BOARD;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onBoardEvent.orderStatus);
+        this.orderStatus = onBoardEvent.orderStatus;
     }
 
 
@@ -80,14 +88,14 @@ public class OrderAggregate {
         if (this.orderStatus != OrderStatus.ON_BOARD) {
             throw new RuntimeException("Order Should be on on_board status");
         }
-        AggregateLifecycle.apply(new OnActivatedEvent(activeOrderCommand.id));
+        AggregateLifecycle.apply(new OnActivatedEvent(activeOrderCommand.id, OrderStatus.ACTIVATE));
 
     }
 
     @EventSourcingHandler
     public void on(OnActivatedEvent onActivatedEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ACTIVATE);
-        this.orderStatus = OrderStatus.ACTIVATE;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onActivatedEvent.orderStatus);
+        this.orderStatus = onActivatedEvent.orderStatus;
 
     }
 
@@ -98,13 +106,13 @@ public class OrderAggregate {
             throw new RuntimeException("Order Should be on activate status");
         }
 
-        AggregateLifecycle.apply(new OnModifyingEvent(onModifyOrderCommand.id));
+        AggregateLifecycle.apply(new OnModifyingEvent(onModifyOrderCommand.id, OrderStatus.ON_MODIFY));
     }
 
     @EventSourcingHandler
     public void on(OnModifyingEvent onModifyingEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ON_MODIFY);
-        this.orderStatus = OrderStatus.ON_MODIFY;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onModifyingEvent.orderStatus);
+        this.orderStatus = onModifyingEvent.orderStatus;
     }
 
     @CommandHandler
@@ -113,13 +121,13 @@ public class OrderAggregate {
             throw new RuntimeException("Order Should be on modified status");
         }
 
-        AggregateLifecycle.apply(new OnModifiedEvent(modifyOrderCommand.id));
+        AggregateLifecycle.apply(new OnModifiedEvent(modifyOrderCommand.id, OrderStatus.MODIFIED));
     }
 
     @EventSourcingHandler
     public void on(OnModifiedEvent onModifiedEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.MODIFIED);
-        this.orderStatus = OrderStatus.MODIFIED;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onModifiedEvent.orderStatus);
+        this.orderStatus = onModifiedEvent.orderStatus;
     }
 
 
@@ -133,14 +141,14 @@ public class OrderAggregate {
             throw new RuntimeException("Order is canceled before");
         }
 
-        AggregateLifecycle.apply(new OnCancellingEvent(onCanceleOrderCommand.id));
+        AggregateLifecycle.apply(new OnCancellingEvent(onCanceleOrderCommand.id, OrderStatus.ON_CANCEL));
     }
 
 
     @EventSourcingHandler
     public void on(OnCancellingEvent onCancellingEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.ON_CANCEL);
-        this.orderStatus = OrderStatus.ON_CANCEL;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onCancellingEvent.orderStatus);
+        this.orderStatus = onCancellingEvent.orderStatus;
     }
 
     @CommandHandler
@@ -153,14 +161,14 @@ public class OrderAggregate {
             throw new RuntimeException("Order is canceled before");
         }
 
-        AggregateLifecycle.apply(new OnCanceledEvent(canceleOrderCommand.id));
+        AggregateLifecycle.apply(new OnCanceledEvent(canceleOrderCommand.id, OrderStatus.CANCELED));
     }
 
 
     @EventSourcingHandler
     public void on(OnCanceledEvent onCanceledEvent) {
-        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, OrderStatus.CANCELED);
-        this.orderStatus = OrderStatus.CANCELED;
+        log.info("Changing order id=[{}] from status [{}] to status=[{}]", this.id, this.orderStatus, onCanceledEvent.orderStatus);
+        this.orderStatus = onCanceledEvent.orderStatus;
     }
 
 }

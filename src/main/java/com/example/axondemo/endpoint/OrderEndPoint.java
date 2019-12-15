@@ -7,7 +7,7 @@ import com.example.axondemo.commands.create.OnBoardOrderCommand;
 import com.example.axondemo.commands.create.ReceiveOrderCommand;
 import com.example.axondemo.commands.modify.ModifyOrderCommand;
 import com.example.axondemo.commands.modify.OnModifyOrderCommand;
-import com.example.axondemo.service.OrderCommandService;
+import com.example.axondemo.service.command.OrderCommandService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,8 +29,8 @@ public class OrderEndPoint {
     }
 
     @PostMapping("/receive")
-    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long orderId) {
-        return orderCommandService.receiveOrder(orderId);
+    public CompletableFuture<ReceiveOrderCommand> receiveOrder(Long orderId, Double price, Integer quantity) {
+        return orderCommandService.receiveOrder(orderId, price, quantity);
     }
 
     @PutMapping("/onBoardOrder")

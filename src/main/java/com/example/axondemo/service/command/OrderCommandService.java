@@ -1,4 +1,4 @@
-package com.example.axondemo.service;
+package com.example.axondemo.service.command;
 
 import com.example.axondemo.commands.cancel.CanceleOrderCommand;
 import com.example.axondemo.commands.cancel.OnCanceleOrderCommand;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
  */
 
 public interface OrderCommandService {
-    CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id);
+    CompletableFuture<ReceiveOrderCommand> receiveOrder(Long id, Double price, Integer quantity);
 
     CompletableFuture<OnBoardOrderCommand> onBoardOrder(Long id);
 
